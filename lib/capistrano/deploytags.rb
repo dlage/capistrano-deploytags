@@ -1,6 +1,21 @@
 # Ensure deploy tasks are loaded before we run
 require 'capistrano/deploy'
 
+module SSHKit
+  class CommandMap
+    def defaults
+      Hash.new do |hash, command|
+        if %w{if test time exec}.include? command.to_s || File.executable?('/usr/bin/env')
+          hash[command] = command.to_s
+        else
+          #hash[command] = "/usr/bin/env #{command}"
+          hash[command] = "#{command}"
+        end
+      end
+    end
+  end
+end
+
 # Load extra tasks into the deploy namespace
 load File.expand_path("../tasks/deploytags.rake", __FILE__)
 
