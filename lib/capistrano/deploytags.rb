@@ -5,11 +5,11 @@ module SSHKit
   class CommandMap
     def defaults
       Hash.new do |hash, command|
-        if %w{if test time exec}.include? command.to_s || File.executable?('/usr/bin/env')
+        if %w{if test time exec git}.include? command.to_s || !File.executable?('/usr/bin/env')
           hash[command] = command.to_s
         else
-          #hash[command] = "/usr/bin/env #{command}"
-          hash[command] = "#{command}"
+          hash[command] = "/usr/bin/env #{command}"
+          #hash[command] = "#{command}"
         end
       end
     end
